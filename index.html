@@ -169,6 +169,11 @@
       background: var(--bg-card);
     }
 
+    .btn-small {
+      padding: 12px 16px;
+      font-size: 0.875rem;
+    }
+
     /* Word List */
     .word-list {
       display: flex;
@@ -231,6 +236,17 @@
 
     .empty-state p {
       margin-bottom: 20px;
+    }
+
+    /* Import/Export Buttons */
+    .data-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .data-buttons .btn {
+      flex: 1;
     }
 
     /* Practice Section */
@@ -478,6 +494,95 @@
       border-color: var(--accent);
     }
 
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.show .modal {
+      transform: scale(1);
+    }
+
+    .modal h2 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .modal-option {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-option:hover {
+      border-color: var(--accent);
+    }
+
+    .modal-option h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .modal-option p {
+      margin-bottom: 0;
+      font-size: 0.8rem;
+    }
+
+    .modal-cancel {
+      width: 100%;
+      padding: 12px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .modal-cancel:hover {
+      background: var(--bg-card);
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -491,7 +596,7 @@
       font-size: 0.875rem;
       opacity: 0;
       transition: all 0.3s;
-      z-index: 1000;
+      z-index: 1001;
     }
 
     .toast.show {
@@ -507,6 +612,11 @@
       border-color: var(--error);
     }
 
+    /* Hidden file input */
+    .hidden-input {
+      display: none;
+    }
+
     /* Responsive */
     @media (max-width: 400px) {
       .container {
@@ -520,6 +630,10 @@
       .nav-btn {
         padding: 10px 12px;
         font-size: 0.8rem;
+      }
+
+      .data-buttons {
+        flex-direction: column;
       }
     }
   </style>
@@ -560,10 +674,15 @@
 
     <!-- Word List Section -->
     <section id="list" class="section">
+      <div class="data-buttons">
+        <button id="exportBtn" class="btn btn-secondary btn-small">エクスポート</button>
+        <button id="importBtn" class="btn btn-secondary btn-small">インポート</button>
+      </div>
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="検索...">
       </div>
       <div id="wordList" class="word-list"></div>
+      <input type="file" id="fileInput" class="hidden-input" accept=".json">
     </section>
 
     <!-- Practice Section -->
@@ -630,6 +749,26 @@
         <button id="backToSetup" class="btn btn-secondary" style="margin-top: 12px;">設定に戻る</button>
       </div>
     </section>
+  </div>
+
+  <!-- Import Modal -->
+  <div id="importModal" class="modal-overlay">
+    <div class="modal">
+      <h2>インポート方法を選択</h2>
+      <p>読み込むファイル: <span id="importFileName"></span></p>
+      
+      <div class="modal-option" id="mergeOption">
+        <h3>🔄 マージ（合体）</h3>
+        <p>既存の単語を残して、新しい単語を追加します</p>
+      </div>
+      
+      <div class="modal-option" id="overwriteOption">
+        <h3>📝 上書き</h3>
+        <p>既存の単語をすべて削除して、インポートしたデータに置き換えます</p>
+      </div>
+      
+      <button id="cancelImport" class="modal-cancel">キャンセル</button>
+    </div>
   </div>
 
   <div id="toast" class="toast"></div>
@@ -757,6 +896,134 @@
     document.getElementById('searchInput').addEventListener('input', (e) => {
       renderWordList(e.target.value);
     });
+
+    // Export / Import
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const words = loadWords();
+      
+      if (words.length === 0) {
+        showToast('エクスポートする単語がありません', 'error');
+        return;
+      }
+      
+      const dataStr = JSON.stringify(words, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      const date = new Date().toISOString().slice(0, 10);
+      a.download = `chinese-vocab-${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast(`${words.length}件の単語をエクスポートしました`);
+    });
+
+    let pendingImportData = null;
+
+    document.getElementById('importBtn').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target.result);
+          
+          if (!Array.isArray(data)) {
+            throw new Error('Invalid format');
+          }
+          
+          // Validate data structure
+          const isValid = data.every(item => 
+            item.chinese && item.pinyin && item.japanese
+          );
+          
+          if (!isValid) {
+            throw new Error('Invalid word format');
+          }
+          
+          pendingImportData = data;
+          document.getElementById('importFileName').textContent = file.name;
+          document.getElementById('importModal').classList.add('show');
+          
+        } catch (error) {
+          showToast('無効なファイル形式です', 'error');
+        }
+      };
+      reader.readAsText(file);
+      
+      // Reset file input
+      e.target.value = '';
+    });
+
+    document.getElementById('mergeOption').addEventListener('click', () => {
+      if (!pendingImportData) return;
+      
+      const existingWords = loadWords();
+      const existingKeys = new Set(existingWords.map(w => `${w.chinese}-${w.pinyin}-${w.japanese}`));
+      
+      let addedCount = 0;
+      pendingImportData.forEach(word => {
+        const key = `${word.chinese}-${word.pinyin}-${word.japanese}`;
+        if (!existingKeys.has(key)) {
+          existingWords.push({
+            ...word,
+            id: Date.now() + Math.random(),
+            correctCount: word.correctCount || 0,
+            wrongCount: word.wrongCount || 0,
+            lastPracticed: word.lastPracticed || null
+          });
+          addedCount++;
+        }
+      });
+      
+      saveWords(existingWords);
+      closeImportModal();
+      renderWordList();
+      showToast(`${addedCount}件の新しい単語を追加しました`);
+    });
+
+    document.getElementById('overwriteOption').addEventListener('click', () => {
+      if (!pendingImportData) return;
+      
+      if (!confirm('既存の単語がすべて削除されます。よろしいですか？')) {
+        return;
+      }
+      
+      const newWords = pendingImportData.map(word => ({
+        ...word,
+        id: Date.now() + Math.random(),
+        correctCount: word.correctCount || 0,
+        wrongCount: word.wrongCount || 0,
+        lastPracticed: word.lastPracticed || null
+      }));
+      
+      saveWords(newWords);
+      closeImportModal();
+      renderWordList();
+      showToast(`${newWords.length}件の単語をインポートしました`);
+    });
+
+    document.getElementById('cancelImport').addEventListener('click', closeImportModal);
+
+    document.getElementById('importModal').addEventListener('click', (e) => {
+      if (e.target.id === 'importModal') {
+        closeImportModal();
+      }
+    });
+
+    function closeImportModal() {
+      document.getElementById('importModal').classList.remove('show');
+      pendingImportData = null;
+    }
 
     // Practice Mode
     let currentMode = 'hanzi-pinyin';
