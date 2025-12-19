@@ -199,6 +199,9 @@
       font-size: 1.25rem;
       font-weight: 500;
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .word-pinyin {
@@ -210,6 +213,32 @@
     .word-japanese {
       font-size: 0.875rem;
       color: var(--text-secondary);
+    }
+
+    .word-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .speak-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 8px;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .speak-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .speak-btn:active {
+      transform: scale(0.95);
     }
 
     .word-delete {
@@ -355,11 +384,42 @@
       margin-bottom: 24px;
     }
 
+    .quiz-question-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
     .quiz-question {
       font-size: 2.5rem;
       font-weight: 700;
-      margin-bottom: 12px;
       line-height: 1.3;
+    }
+
+    .quiz-speak-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 50%;
+      opacity: 0.9;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .quiz-speak-btn:hover {
+      opacity: 1;
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .quiz-speak-btn:active {
+      transform: scale(0.95);
     }
 
     .quiz-hint {
@@ -716,7 +776,10 @@
         </div>
         
         <div class="quiz-card">
-          <div id="quizQuestion" class="quiz-question">你好</div>
+          <div class="quiz-question-wrapper">
+            <div id="quizQuestion" class="quiz-question">你好</div>
+            <button id="quizSpeakBtn" class="quiz-speak-btn" title="発音を聞く">🔊</button>
+          </div>
           <div id="quizHint" class="quiz-hint">こんにちは</div>
         </div>
         
@@ -789,6 +852,36 @@
     
     function updateTotalCount() {
       document.getElementById('totalWords').textContent = loadWords().length;
+    }
+
+    // Text-to-Speech
+    function speakChinese(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('このブラウザは音声に対応していません', 'error');
+        return;
+      }
+      
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = 0.8; // Slightly slower for learning
+      
+      // Try to find a Chinese voice
+      const voices = speechSynthesis.getVoices();
+      const chineseVoice = voices.find(v => v.lang.startsWith('zh'));
+      if (chineseVoice) {
+        utterance.voice = chineseVoice;
+      }
+      
+      speechSynthesis.speak(utterance);
+    }
+
+    // Load voices (needed for some browsers)
+    if ('speechSynthesis' in window) {
+      speechSynthesis.getVoices();
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     }
 
     // Toast
@@ -879,7 +972,10 @@
             <div class="word-pinyin">${word.pinyin}</div>
             <div class="word-japanese">${word.japanese}</div>
           </div>
-          <button class="word-delete" onclick="deleteWord(${word.id})">×</button>
+          <div class="word-actions">
+            <button class="speak-btn" onclick="speakChinese('${word.chinese}')" title="発音を聞く">🔊</button>
+            <button class="word-delete" onclick="deleteWord(${word.id})">×</button>
+          </div>
         </div>
       `).join('');
     }
@@ -1098,6 +1194,7 @@
       const questionEl = document.getElementById('quizQuestion');
       const hintEl = document.getElementById('quizHint');
       const inputEl = document.getElementById('quizInput');
+      const speakBtn = document.getElementById('quizSpeakBtn');
       
       // Set question based on mode
       if (currentMode === 'hanzi-pinyin') {
@@ -1105,14 +1202,18 @@
         hintEl.textContent = showHint ? word.japanese : '';
         hintEl.style.display = showHint ? 'block' : 'none';
         inputEl.placeholder = 'ピンインを入力';
+        speakBtn.style.display = 'block';
+        speakBtn.onclick = () => speakChinese(word.chinese);
       } else if (currentMode === 'japanese-pinyin') {
         questionEl.textContent = word.japanese;
         hintEl.style.display = 'none';
         inputEl.placeholder = 'ピンインを入力';
+        speakBtn.style.display = 'none';
       } else if (currentMode === 'japanese-hanzi') {
         questionEl.textContent = word.japanese;
         hintEl.style.display = 'none';
         inputEl.placeholder = '漢字を入力';
+        speakBtn.style.display = 'none';
       }
       
       document.getElementById('quizProgress').textContent = `${currentIndex + 1} / ${quizWords.length}`;
