@@ -42,8 +42,7 @@
       max-width: 500px;
       margin: 0 auto;
       padding: 20px;
-      min-height: 100vh;
-      min-height: 100dvh;
+      padding-bottom: 40px;
     }
 
     /* Header */
@@ -106,7 +105,7 @@
 
     /* Add Word Form */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .form-group label {
@@ -116,7 +115,7 @@
       color: var(--text-secondary);
     }
 
-    .form-group input {
+    .form-group input, .form-group textarea {
       width: 100%;
       padding: 14px 16px;
       background: var(--bg-secondary);
@@ -128,14 +127,27 @@
       transition: border-color 0.2s;
     }
 
-    .form-group input:focus {
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
       outline: none;
       border-color: var(--accent);
     }
 
-    .form-group input::placeholder {
+    .form-group input::placeholder, .form-group textarea::placeholder {
       color: var(--text-secondary);
       opacity: 0.6;
+    }
+
+    .form-section-title {
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin: 24px 0 12px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
     }
 
     .btn {
@@ -174,6 +186,83 @@
       font-size: 0.875rem;
     }
 
+    /* Category Tags Input */
+    .category-input-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      min-height: 50px;
+      align-items: center;
+    }
+
+    .category-input-wrapper:focus-within {
+      border-color: var(--accent);
+    }
+
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--accent);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: white;
+    }
+
+    .category-tag .remove-tag {
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .category-tag .remove-tag:hover {
+      opacity: 1;
+    }
+
+    .category-input {
+      flex: 1;
+      min-width: 100px;
+      padding: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .category-input:focus {
+      outline: none;
+    }
+
+    .category-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .category-suggestion {
+      padding: 6px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .category-suggestion:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     /* Word List */
     .word-list {
       display: flex;
@@ -186,9 +275,12 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
+    }
+
+    .word-item-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .word-info {
@@ -199,9 +291,6 @@
       font-size: 1.25rem;
       font-weight: 500;
       margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .word-pinyin {
@@ -213,6 +302,47 @@
     .word-japanese {
       font-size: 0.875rem;
       color: var(--text-secondary);
+    }
+
+    .word-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .word-category-tag {
+      padding: 3px 10px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .word-example {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .word-example-chinese {
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .word-example-pinyin {
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+
+    .word-example-japanese {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
     }
 
     .word-actions {
@@ -237,8 +367,9 @@
       transform: scale(1.1);
     }
 
-    .speak-btn:active {
-      transform: scale(0.95);
+    .speak-btn.small {
+      font-size: 1rem;
+      padding: 4px;
     }
 
     .word-delete {
@@ -276,6 +407,45 @@
 
     .data-buttons .btn {
       flex: 1;
+    }
+
+    /* Filter by Category */
+    .filter-section {
+      margin-bottom: 20px;
+    }
+
+    .filter-section label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .filter-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-category {
+      padding: 8px 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-category:hover {
+      border-color: var(--accent);
+    }
+
+    .filter-category.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
     }
 
     /* Practice Section */
@@ -357,6 +527,19 @@
       transform: translateX(22px);
     }
 
+    .practice-category-filter {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .practice-category-filter h4 {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+
     /* Quiz Card */
     .quiz-container {
       display: none;
@@ -418,10 +601,6 @@
       border-color: var(--accent);
     }
 
-    .quiz-speak-btn:active {
-      transform: scale(0.95);
-    }
-
     .quiz-hint {
       font-size: 1rem;
       color: var(--text-secondary);
@@ -454,6 +633,57 @@
     .quiz-input.incorrect {
       border-color: var(--error);
       background: rgba(248, 113, 113, 0.1);
+    }
+
+    /* Handwriting Canvas */
+    .handwriting-container {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .handwriting-container.active {
+      display: flex;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .canvas-wrapper.correct {
+      border-color: var(--success);
+    }
+
+    .canvas-wrapper.incorrect {
+      border-color: var(--error);
+    }
+
+    #handwritingCanvas {
+      display: block;
+      width: 100%;
+      height: 200px;
+      touch-action: none;
+    }
+
+    .canvas-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .canvas-controls .btn {
+      flex: 1;
+    }
+
+    .recognized-text {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--accent);
+      min-height: 40px;
     }
 
     .quiz-feedback {
@@ -717,18 +947,42 @@
     <section id="add" class="section active">
       <form id="addWordForm">
         <div class="form-group">
-          <label for="chinese">中国語（漢字）</label>
+          <label for="chinese">中国語（漢字）*</label>
           <input type="text" id="chinese" placeholder="例：你好" required>
         </div>
         <div class="form-group">
-          <label for="pinyin">ピンイン</label>
+          <label for="pinyin">ピンイン *</label>
           <input type="text" id="pinyin" placeholder="例：nǐ hǎo" required>
         </div>
         <div class="form-group">
-          <label for="japanese">日本語訳</label>
+          <label for="japanese">日本語訳 *</label>
           <input type="text" id="japanese" placeholder="例：こんにちは" required>
         </div>
-        <button type="submit" class="btn">単語を追加</button>
+
+        <div class="form-group">
+          <label>カテゴリ</label>
+          <div class="category-input-wrapper" id="categoryInputWrapper">
+            <input type="text" class="category-input" id="categoryInput" placeholder="カテゴリを入力してEnter">
+          </div>
+          <div class="category-suggestions" id="categorySuggestions"></div>
+        </div>
+
+        <div class="form-section-title">例文（任意）</div>
+        
+        <div class="form-group">
+          <label for="exampleChinese">例文（中国語）</label>
+          <input type="text" id="exampleChinese" placeholder="例：你好，我是小明。">
+        </div>
+        <div class="form-group">
+          <label for="examplePinyin">例文のピンイン</label>
+          <input type="text" id="examplePinyin" placeholder="例：Nǐ hǎo, wǒ shì Xiǎo Míng.">
+        </div>
+        <div class="form-group">
+          <label for="exampleJapanese">例文の日本語訳</label>
+          <input type="text" id="exampleJapanese" placeholder="例：こんにちは、私は小明です。">
+        </div>
+
+        <button type="submit" class="btn" style="margin-top: 20px;">単語を追加</button>
       </form>
     </section>
 
@@ -738,6 +992,12 @@
         <button id="exportBtn" class="btn btn-secondary btn-small">エクスポート</button>
         <button id="importBtn" class="btn btn-secondary btn-small">インポート</button>
       </div>
+
+      <div class="filter-section" id="filterSection" style="display: none;">
+        <label>カテゴリで絞り込み</label>
+        <div class="filter-categories" id="filterCategories"></div>
+      </div>
+
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="検索...">
       </div>
@@ -757,13 +1017,18 @@
           <p>日本語訳を見てピンインを入力</p>
         </div>
         <div class="mode-select" data-mode="japanese-hanzi">
-          <h3>日本語 → 漢字</h3>
-          <p>日本語訳を見て漢字を入力</p>
+          <h3>日本語 → 漢字（手書き）</h3>
+          <p>日本語訳を見て漢字を手書き入力</p>
         </div>
         
         <div class="toggle-option" id="showHintToggle">
           <span>日本語訳をヒントとして表示</span>
           <div class="toggle-switch active"></div>
+        </div>
+
+        <div class="practice-category-filter" id="practiceCategoryFilter" style="display: none;">
+          <h4>カテゴリを選択（複数可）</h4>
+          <div class="filter-categories" id="practiceCategories"></div>
         </div>
 
         <button id="startPractice" class="btn">練習を開始</button>
@@ -784,6 +1049,17 @@
         </div>
         
         <input type="text" id="quizInput" class="quiz-input" placeholder="答えを入力" autocomplete="off">
+        
+        <div class="handwriting-container" id="handwritingContainer">
+          <div class="canvas-wrapper" id="canvasWrapper">
+            <canvas id="handwritingCanvas"></canvas>
+          </div>
+          <div class="recognized-text" id="recognizedText"></div>
+          <div class="canvas-controls">
+            <button id="clearCanvas" class="btn btn-secondary btn-small">消す</button>
+            <button id="recognizeBtn" class="btn btn-small">認識する</button>
+          </div>
+        </div>
         
         <div id="quizFeedback" class="quiz-feedback"></div>
         
@@ -839,6 +1115,7 @@
   <script>
     // Data Management
     const DB_KEY = 'chineseVocabDB';
+    const CATEGORIES_KEY = 'chineseVocabCategories';
     
     function loadWords() {
       const data = localStorage.getItem(DB_KEY);
@@ -848,6 +1125,35 @@
     function saveWords(words) {
       localStorage.setItem(DB_KEY, JSON.stringify(words));
       updateTotalCount();
+      updateAllCategories();
+    }
+
+    function loadCategories() {
+      const data = localStorage.getItem(CATEGORIES_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveCategories(categories) {
+      localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+    }
+
+    function getAllCategories() {
+      const words = loadWords();
+      const categorySet = new Set();
+      words.forEach(w => {
+        if (w.categories) {
+          w.categories.forEach(c => categorySet.add(c));
+        }
+      });
+      return Array.from(categorySet).sort();
+    }
+
+    function updateAllCategories() {
+      const categories = getAllCategories();
+      saveCategories(categories);
+      updateCategorySuggestions();
+      updateFilterCategories();
+      updatePracticeCategories();
     }
     
     function updateTotalCount() {
@@ -861,14 +1167,12 @@
         return;
       }
       
-      // Cancel any ongoing speech
       speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'zh-CN';
-      utterance.rate = 0.8; // Slightly slower for learning
+      utterance.rate = 0.8;
       
-      // Try to find a Chinese voice
       const voices = speechSynthesis.getVoices();
       const chineseVoice = voices.find(v => v.lang.startsWith('zh'));
       if (chineseVoice) {
@@ -878,7 +1182,6 @@
       speechSynthesis.speak(utterance);
     }
 
-    // Load voices (needed for some browsers)
     if ('speechSynthesis' in window) {
       speechSynthesis.getVoices();
       speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
@@ -911,6 +1214,74 @@
       });
     });
 
+    // Category Input Management
+    let selectedCategories = [];
+
+    function updateCategorySuggestions() {
+      const allCategories = getAllCategories();
+      const suggestionsContainer = document.getElementById('categorySuggestions');
+      
+      const availableCategories = allCategories.filter(c => !selectedCategories.includes(c));
+      
+      if (availableCategories.length === 0) {
+        suggestionsContainer.innerHTML = '';
+        return;
+      }
+
+      suggestionsContainer.innerHTML = availableCategories.map(cat => 
+        `<div class="category-suggestion" data-category="${cat}">${cat}</div>`
+      ).join('');
+
+      suggestionsContainer.querySelectorAll('.category-suggestion').forEach(el => {
+        el.addEventListener('click', () => {
+          addCategory(el.dataset.category);
+        });
+      });
+    }
+
+    function renderSelectedCategories() {
+      const wrapper = document.getElementById('categoryInputWrapper');
+      const input = document.getElementById('categoryInput');
+      
+      wrapper.querySelectorAll('.category-tag').forEach(el => el.remove());
+      
+      selectedCategories.forEach(cat => {
+        const tag = document.createElement('span');
+        tag.className = 'category-tag';
+        tag.innerHTML = `${cat}<span class="remove-tag" data-category="${cat}">×</span>`;
+        wrapper.insertBefore(tag, input);
+      });
+
+      wrapper.querySelectorAll('.remove-tag').forEach(el => {
+        el.addEventListener('click', () => {
+          removeCategory(el.dataset.category);
+        });
+      });
+
+      updateCategorySuggestions();
+    }
+
+    function addCategory(category) {
+      category = category.trim();
+      if (category && !selectedCategories.includes(category)) {
+        selectedCategories.push(category);
+        renderSelectedCategories();
+      }
+      document.getElementById('categoryInput').value = '';
+    }
+
+    function removeCategory(category) {
+      selectedCategories = selectedCategories.filter(c => c !== category);
+      renderSelectedCategories();
+    }
+
+    document.getElementById('categoryInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addCategory(e.target.value);
+      }
+    });
+
     // Add Word Form
     document.getElementById('addWordForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -918,48 +1289,117 @@
       const chinese = document.getElementById('chinese').value.trim();
       const pinyin = document.getElementById('pinyin').value.trim();
       const japanese = document.getElementById('japanese').value.trim();
+      const exampleChinese = document.getElementById('exampleChinese').value.trim();
+      const examplePinyin = document.getElementById('examplePinyin').value.trim();
+      const exampleJapanese = document.getElementById('exampleJapanese').value.trim();
       
       if (!chinese || !pinyin || !japanese) return;
       
       const words = loadWords();
-      words.push({
+      const newWord = {
         id: Date.now(),
         chinese,
         pinyin,
         japanese,
+        categories: [...selectedCategories],
         correctCount: 0,
         wrongCount: 0,
         lastPracticed: null
-      });
-      
+      };
+
+      if (exampleChinese) {
+        newWord.example = {
+          chinese: exampleChinese,
+          pinyin: examplePinyin,
+          japanese: exampleJapanese
+        };
+      }
+
+      words.push(newWord);
       saveWords(words);
       
+      // Reset form
       document.getElementById('chinese').value = '';
       document.getElementById('pinyin').value = '';
       document.getElementById('japanese').value = '';
+      document.getElementById('exampleChinese').value = '';
+      document.getElementById('examplePinyin').value = '';
+      document.getElementById('exampleJapanese').value = '';
+      selectedCategories = [];
+      renderSelectedCategories();
       document.getElementById('chinese').focus();
       
       showToast('単語を追加しました');
     });
+
+    // Filter categories for word list
+    let activeFilterCategories = [];
+
+    function updateFilterCategories() {
+      const allCategories = getAllCategories();
+      const filterSection = document.getElementById('filterSection');
+      const container = document.getElementById('filterCategories');
+
+      if (allCategories.length === 0) {
+        filterSection.style.display = 'none';
+        return;
+      }
+
+      filterSection.style.display = 'block';
+      container.innerHTML = `
+        <div class="filter-category ${activeFilterCategories.length === 0 ? 'active' : ''}" data-category="__all__">すべて</div>
+        ${allCategories.map(cat => 
+          `<div class="filter-category ${activeFilterCategories.includes(cat) ? 'active' : ''}" data-category="${cat}">${cat}</div>`
+        ).join('')}
+      `;
+
+      container.querySelectorAll('.filter-category').forEach(el => {
+        el.addEventListener('click', () => {
+          const category = el.dataset.category;
+          if (category === '__all__') {
+            activeFilterCategories = [];
+          } else {
+            if (activeFilterCategories.includes(category)) {
+              activeFilterCategories = activeFilterCategories.filter(c => c !== category);
+            } else {
+              activeFilterCategories.push(category);
+            }
+          }
+          updateFilterCategories();
+          renderWordList();
+        });
+      });
+    }
 
     // Word List
     function renderWordList(filter = '') {
       const words = loadWords();
       const container = document.getElementById('wordList');
       
-      const filtered = filter 
-        ? words.filter(w => 
-            w.chinese.includes(filter) || 
-            w.pinyin.toLowerCase().includes(filter.toLowerCase()) || 
-            w.japanese.includes(filter)
-          )
-        : words;
+      let filtered = words;
+
+      // Apply category filter
+      if (activeFilterCategories.length > 0) {
+        filtered = filtered.filter(w => 
+          w.categories && w.categories.some(c => activeFilterCategories.includes(c))
+        );
+      }
+
+      // Apply text search filter
+      if (filter) {
+        filtered = filtered.filter(w => 
+          w.chinese.includes(filter) || 
+          w.pinyin.toLowerCase().includes(filter.toLowerCase()) || 
+          w.japanese.includes(filter) ||
+          (w.categories && w.categories.some(c => c.includes(filter)))
+        );
+      }
       
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <p>${filter ? '検索結果がありません' : 'まだ単語がありません'}</p>
-            ${!filter ? '<p>「追加」タブから単語を追加してください</p>' : ''}
+            <p>${filter || activeFilterCategories.length > 0 ? '検索結果がありません' : 'まだ単語がありません'}</p>
+            ${!filter && activeFilterCategories.length === 0 ? '<p>「追加」タブから単語を追加してください</p>' : ''}
           </div>
         `;
         return;
@@ -967,15 +1407,32 @@
       
       container.innerHTML = filtered.map(word => `
         <div class="word-item" data-id="${word.id}">
-          <div class="word-info">
-            <div class="word-chinese">${word.chinese}</div>
-            <div class="word-pinyin">${word.pinyin}</div>
-            <div class="word-japanese">${word.japanese}</div>
+          <div class="word-item-header">
+            <div class="word-info">
+              <div class="word-chinese">${word.chinese}</div>
+              <div class="word-pinyin">${word.pinyin}</div>
+              <div class="word-japanese">${word.japanese}</div>
+              ${word.categories && word.categories.length > 0 ? `
+                <div class="word-categories">
+                  ${word.categories.map(c => `<span class="word-category-tag">${c}</span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+            <div class="word-actions">
+              <button class="speak-btn" onclick="speakChinese('${word.chinese}')" title="発音を聞く">🔊</button>
+              <button class="word-delete" onclick="deleteWord(${word.id})">×</button>
+            </div>
           </div>
-          <div class="word-actions">
-            <button class="speak-btn" onclick="speakChinese('${word.chinese}')" title="発音を聞く">🔊</button>
-            <button class="word-delete" onclick="deleteWord(${word.id})">×</button>
-          </div>
+          ${word.example ? `
+            <div class="word-example">
+              <div class="word-example-chinese">
+                ${word.example.chinese}
+                <button class="speak-btn small" onclick="speakChinese('${word.example.chinese}')" title="発音を聞く">🔊</button>
+              </div>
+              ${word.example.pinyin ? `<div class="word-example-pinyin">${word.example.pinyin}</div>` : ''}
+              ${word.example.japanese ? `<div class="word-example-japanese">${word.example.japanese}</div>` : ''}
+            </div>
+          ` : ''}
         </div>
       `).join('');
     }
@@ -1037,7 +1494,6 @@
             throw new Error('Invalid format');
           }
           
-          // Validate data structure
           const isValid = data.every(item => 
             item.chinese && item.pinyin && item.japanese
           );
@@ -1055,8 +1511,6 @@
         }
       };
       reader.readAsText(file);
-      
-      // Reset file input
       e.target.value = '';
     });
 
@@ -1073,6 +1527,7 @@
           existingWords.push({
             ...word,
             id: Date.now() + Math.random(),
+            categories: word.categories || [],
             correctCount: word.correctCount || 0,
             wrongCount: word.wrongCount || 0,
             lastPracticed: word.lastPracticed || null
@@ -1097,6 +1552,7 @@
       const newWords = pendingImportData.map(word => ({
         ...word,
         id: Date.now() + Math.random(),
+        categories: word.categories || [],
         correctCount: word.correctCount || 0,
         wrongCount: word.wrongCount || 0,
         lastPracticed: word.lastPracticed || null
@@ -1128,6 +1584,42 @@
     let currentIndex = 0;
     let correctAnswers = 0;
     let answered = false;
+    let practiceSelectedCategories = [];
+
+    function updatePracticeCategories() {
+      const allCategories = getAllCategories();
+      const filterDiv = document.getElementById('practiceCategoryFilter');
+      const container = document.getElementById('practiceCategories');
+
+      if (allCategories.length === 0) {
+        filterDiv.style.display = 'none';
+        return;
+      }
+
+      filterDiv.style.display = 'block';
+      container.innerHTML = `
+        <div class="filter-category ${practiceSelectedCategories.length === 0 ? 'active' : ''}" data-category="__all__">すべて</div>
+        ${allCategories.map(cat => 
+          `<div class="filter-category ${practiceSelectedCategories.includes(cat) ? 'active' : ''}" data-category="${cat}">${cat}</div>`
+        ).join('')}
+      `;
+
+      container.querySelectorAll('.filter-category').forEach(el => {
+        el.addEventListener('click', () => {
+          const category = el.dataset.category;
+          if (category === '__all__') {
+            practiceSelectedCategories = [];
+          } else {
+            if (practiceSelectedCategories.includes(category)) {
+              practiceSelectedCategories = practiceSelectedCategories.filter(c => c !== category);
+            } else {
+              practiceSelectedCategories.push(category);
+            }
+          }
+          updatePracticeCategories();
+        });
+      });
+    }
 
     document.querySelectorAll('.mode-select').forEach(el => {
       el.addEventListener('click', () => {
@@ -1135,7 +1627,6 @@
         el.classList.add('selected');
         currentMode = el.dataset.mode;
         
-        // Hide hint toggle for japanese modes
         const hintToggle = document.getElementById('showHintToggle');
         hintToggle.style.display = currentMode === 'hanzi-pinyin' ? 'flex' : 'none';
       });
@@ -1153,20 +1644,27 @@
       currentIndex = 0;
       correctAnswers = 0;
       quizWords = [];
+      updatePracticeCategories();
     }
 
     function getQuizWords() {
-      const words = loadWords();
+      let words = loadWords();
+
+      // Filter by category if selected
+      if (practiceSelectedCategories.length > 0) {
+        words = words.filter(w => 
+          w.categories && w.categories.some(c => practiceSelectedCategories.includes(c))
+        );
+      }
+
       if (words.length === 0) return [];
       
-      // Sort by priority (more wrong answers = higher priority)
       const sorted = [...words].sort((a, b) => {
         const priorityA = a.wrongCount - a.correctCount;
         const priorityB = b.wrongCount - b.correctCount;
         return priorityB - priorityA;
       });
       
-      // Take up to 10 words, shuffled
       const selected = sorted.slice(0, Math.min(10, sorted.length));
       return selected.sort(() => Math.random() - 0.5);
     }
@@ -1175,7 +1673,7 @@
       quizWords = getQuizWords();
       
       if (quizWords.length === 0) {
-        showToast('単語を追加してください', 'error');
+        showToast('練習する単語がありません', 'error');
         return;
       }
       
@@ -1195,8 +1693,16 @@
       const hintEl = document.getElementById('quizHint');
       const inputEl = document.getElementById('quizInput');
       const speakBtn = document.getElementById('quizSpeakBtn');
+      const handwritingContainer = document.getElementById('handwritingContainer');
+      const canvasWrapper = document.getElementById('canvasWrapper');
       
-      // Set question based on mode
+      // Reset states
+      inputEl.style.display = 'block';
+      handwritingContainer.classList.remove('active');
+      canvasWrapper.classList.remove('correct', 'incorrect');
+      document.getElementById('recognizedText').textContent = '';
+      clearCanvas();
+      
       if (currentMode === 'hanzi-pinyin') {
         questionEl.textContent = word.chinese;
         hintEl.textContent = showHint ? word.japanese : '';
@@ -1212,8 +1718,10 @@
       } else if (currentMode === 'japanese-hanzi') {
         questionEl.textContent = word.japanese;
         hintEl.style.display = 'none';
-        inputEl.placeholder = '漢字を入力';
+        inputEl.style.display = 'none';
+        handwritingContainer.classList.add('active');
         speakBtn.style.display = 'none';
+        initCanvas();
       }
       
       document.getElementById('quizProgress').textContent = `${currentIndex + 1} / ${quizWords.length}`;
@@ -1222,7 +1730,9 @@
       inputEl.value = '';
       inputEl.className = 'quiz-input';
       inputEl.disabled = false;
-      inputEl.focus();
+      if (currentMode !== 'japanese-hanzi') {
+        inputEl.focus();
+      }
       
       document.getElementById('quizFeedback').innerHTML = '';
       document.getElementById('checkAnswer').style.display = 'block';
@@ -1231,11 +1741,145 @@
       answered = false;
     }
 
+    // Handwriting Recognition
+    let canvas, ctx;
+    let isDrawing = false;
+    let strokes = [];
+    let currentStroke = [];
+
+    function initCanvas() {
+      canvas = document.getElementById('handwritingCanvas');
+      ctx = canvas.getContext('2d');
+      
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = 200;
+      
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      // Remove old listeners
+      canvas.onpointerdown = null;
+      canvas.onpointermove = null;
+      canvas.onpointerup = null;
+      canvas.onpointerleave = null;
+      
+      // Add new listeners
+      canvas.onpointerdown = startDrawing;
+      canvas.onpointermove = draw;
+      canvas.onpointerup = stopDrawing;
+      canvas.onpointerleave = stopDrawing;
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      currentStroke = [];
+      const pos = getPos(e);
+      currentStroke.push(pos);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const pos = getPos(e);
+      currentStroke.push(pos);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      if (isDrawing && currentStroke.length > 0) {
+        strokes.push([...currentStroke]);
+      }
+      isDrawing = false;
+      currentStroke = [];
+    }
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function clearCanvas() {
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      strokes = [];
+      currentStroke = [];
+      document.getElementById('recognizedText').textContent = '';
+    }
+
+    document.getElementById('clearCanvas').addEventListener('click', clearCanvas);
+
+    document.getElementById('recognizeBtn').addEventListener('click', async () => {
+      if (strokes.length === 0) {
+        showToast('文字を書いてください', 'error');
+        return;
+      }
+      
+      try {
+        const result = await recognizeHandwriting(strokes, canvas.width, canvas.height);
+        if (result && result.length > 0) {
+          document.getElementById('recognizedText').textContent = result[0];
+        } else {
+          document.getElementById('recognizedText').textContent = '認識できませんでした';
+        }
+      } catch (error) {
+        console.error('Recognition error:', error);
+        document.getElementById('recognizedText').textContent = '認識エラー';
+      }
+    });
+
+    async function recognizeHandwriting(strokes, width, height) {
+      // Format strokes for Google API
+      const formattedStrokes = strokes.map(stroke => {
+        return [
+          stroke.map(p => Math.round(p.x)),
+          stroke.map(p => Math.round(p.y)),
+          stroke.map((_, i) => i * 10)
+        ];
+      });
+
+      const data = {
+        options: 'enable_pre_space',
+        requests: [{
+          writing_guide: {
+            writing_area_width: width,
+            writing_area_height: height
+          },
+          ink: formattedStrokes,
+          language: 'zh'
+        }]
+      };
+
+      const response = await fetch('https://inputtools.google.com/request?itc=zh-t-i0-handwrit&app=translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      
+      if (result[0] === 'SUCCESS' && result[1] && result[1][0] && result[1][0][1]) {
+        return result[1][0][1];
+      }
+      
+      return [];
+    }
+
     function normalizeAnswer(str) {
       return str.toLowerCase()
         .replace(/\s+/g, '')
         .replace(/ü/g, 'v')
-        .replace(/\u0304|\u0301|\u030C|\u0300/g, '') // Remove tone marks
+        .replace(/\u0304|\u0301|\u030C|\u0300/g, '')
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
     }
@@ -1244,24 +1888,38 @@
       if (answered) return;
       
       const word = quizWords[currentIndex];
-      const inputEl = document.getElementById('quizInput');
-      const userAnswer = inputEl.value.trim();
+      let userAnswer;
       
-      if (!userAnswer) return;
-      
-      let correctAnswer;
       if (currentMode === 'japanese-hanzi') {
-        correctAnswer = word.chinese;
+        userAnswer = document.getElementById('recognizedText').textContent.trim();
+        if (!userAnswer || userAnswer === '認識できませんでした' || userAnswer === '認識エラー') {
+          showToast('まず「認識する」を押してください', 'error');
+          return;
+        }
       } else {
-        correctAnswer = word.pinyin;
+        userAnswer = document.getElementById('quizInput').value.trim();
+        if (!userAnswer) return;
       }
       
-      const isCorrect = currentMode === 'japanese-hanzi'
-        ? userAnswer === correctAnswer
-        : normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+      let correctAnswer;
+      let isCorrect;
+      
+      if (currentMode === 'japanese-hanzi') {
+        correctAnswer = word.chinese;
+        isCorrect = userAnswer === correctAnswer;
+      } else {
+        correctAnswer = word.pinyin;
+        isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+      }
       
       answered = true;
-      inputEl.disabled = true;
+      
+      const inputEl = document.getElementById('quizInput');
+      const canvasWrapper = document.getElementById('canvasWrapper');
+      
+      if (currentMode !== 'japanese-hanzi') {
+        inputEl.disabled = true;
+      }
       
       // Update word stats
       const words = loadWords();
@@ -1278,12 +1936,20 @@
       
       if (isCorrect) {
         correctAnswers++;
-        inputEl.classList.add('correct');
+        if (currentMode === 'japanese-hanzi') {
+          canvasWrapper.classList.add('correct');
+        } else {
+          inputEl.classList.add('correct');
+        }
         document.getElementById('quizFeedback').innerHTML = `
           <div class="correct-answer">正解！</div>
         `;
       } else {
-        inputEl.classList.add('incorrect');
+        if (currentMode === 'japanese-hanzi') {
+          canvasWrapper.classList.add('incorrect');
+        } else {
+          inputEl.classList.add('incorrect');
+        }
         document.getElementById('quizFeedback').innerHTML = `
           <div class="correct-answer">正解: ${correctAnswer}</div>
           <div class="wrong-answer">あなたの回答: ${userAnswer}</div>
@@ -1349,6 +2015,7 @@
 
     // Initialize
     updateTotalCount();
+    updateAllCategories();
 
     // Register Service Worker
     if ('serviceWorker' in navigator) {
